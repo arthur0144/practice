@@ -2,6 +2,9 @@ package main
 
 import "testing"
 
+// run in console
+// go test -bench . -benchmem
+
 func BenchmarkSearchClosest(b *testing.B) {
 	for b.Loop() {
 		SearchClosest(points, k)
