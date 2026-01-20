@@ -15,7 +15,7 @@ import (
 
 func schedule(dur time.Duration, fn func()) func() {
 	ticker := time.NewTicker(dur)
-	cc := make(chan struct{}, 1)
+	cc := make(chan struct{})
 
 	go func() {
 		defer ticker.Stop()
@@ -30,10 +30,11 @@ func schedule(dur time.Duration, fn func()) func() {
 	}()
 
 	return func() {
-		if ticker.C == nil {
-			return
+		select {
+		case <-cc:
+		default:
+			close(cc)
 		}
-		cc <- struct{}{}
 	}
 }
 
